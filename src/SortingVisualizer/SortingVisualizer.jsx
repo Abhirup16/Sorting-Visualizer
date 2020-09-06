@@ -22,8 +22,8 @@ export default class SortingVisualizer extends React.Component {
   }
   resetArray() {
     const array = [];
-    for (let i = 0; i < 300; i++) {
-      array.push(getRandomArbitrary(5, 700));
+    for (let i = 0; i < 320; i++) {
+      array.push(getRandomArbitrary(5, 685));
     }
     this.setState({array});
   }
@@ -135,13 +135,21 @@ export default class SortingVisualizer extends React.Component {
     return (
       <div className="container">
         {array.map((value, id) => (
-          <div className="bars" key={id} style={{height: `${value}px`}}></div>
+          <div
+            className="bars"
+            key={id}
+            style={{
+              backgroundColor: primary_color,
+              height: `${value}px`,
+            }}></div>
         ))}
-        <button onClick={() => this.resetArray()}>Generate New Array</button>
-        <button onClick={() => this.mergeSort()}>Merge Sort</button>
-        <button onClick={() => this.heapSort()}>Heap Sort</button>
-        <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-        <button onClick={() => this.insertionSort()}>Insertion Sort</button>
+        <div>
+          <button onClick={() => this.resetArray()}>Generate New Array</button>
+          <button onClick={() => this.mergeSort()}>Merge Sort</button>
+          <button onClick={() => this.heapSort()}>Heap Sort</button>
+          <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+          <button onClick={() => this.insertionSort()}>Insertion Sort</button>
+        </div>
       </div>
     );
   }
