@@ -113,7 +113,7 @@ function maxheapify(array, animations, size, root) {
     largest = leftchild;
   if (rightchild < size && array[rightchild] > array[largest])
     largest = rightchild;
-  if (largest != root) {
+  if (largest !== root) {
     let t = array[root];
     array[root] = array[largest];
     array[largest] = t;
