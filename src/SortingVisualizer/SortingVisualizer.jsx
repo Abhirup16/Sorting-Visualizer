@@ -1,23 +1,17 @@
 import React from 'react';
-import {getMergeSortAnimations} from '../sortingAlgorithms/sortingAlgorithms.js';
+//import ReactDOM from 'react-dom'
 import './SortingVisualizer.css';
-
-// Change this value for the speed of the animations.
-const ANIMATION_SPEED_MS = 1;
-
-// Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 310;
-
-// This is the main color of the array bars.
-const PRIMARY_COLOR = 'turquoise';
-
-// This is the color of array bars that are being compared throughout the animations.
-const SECONDARY_COLOR = 'red';
-
+import {
+  mergesort,
+  bubblesort,
+  insertionSort,
+  heapSort,
+} from '../SortingAlgorithms/SortingAlgorithms.js';
+const primary_color = 'turquoise';
+const secondary_color = 'tomato';
 export default class SortingVisualizer extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       array: [],
     };
@@ -26,106 +20,132 @@ export default class SortingVisualizer extends React.Component {
   componentDidMount() {
     this.resetArray();
   }
-
   resetArray() {
     const array = [];
-    for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
-      array.push(randomIntFromInterval(5, 730));
+    for (let i = 0; i < 300; i++) {
+      array.push(getRandomArbitrary(5, 700));
     }
     this.setState({array});
   }
 
   mergeSort() {
-    const animations = getMergeSortAnimations(this.state.array);
+    const animations = mergesort(this.state.array);
     for (let i = 0; i < animations.length; i++) {
-      const arrayBars = document.getElementsByClassName('array-bar');
-      const isColorChange = i % 3 !== 2;
-      if (isColorChange) {
-        const [barOneIdx, barTwoIdx] = animations[i];
-        const barOneStyle = arrayBars[barOneIdx].style;
-        const barTwoStyle = arrayBars[barTwoIdx].style;
-        const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+      const arraybars = document.getElementsByClassName('bars');
+      const changecolor = i % 3 !== 2;
+      if (changecolor) {
+        const [bar1, bar2] = animations[i];
+        const bar1style = arraybars[bar1].style;
+        const bar2style = arraybars[bar2].style;
+        const color = i % 3 === 0 ? secondary_color : primary_color;
         setTimeout(() => {
-          barOneStyle.backgroundColor = color;
-          barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+          bar1style.backgroundColor = color;
+          bar2style.backgroundColor = color;
+        }, i * 5);
       } else {
+        const [bar1, newheight] = animations[i];
         setTimeout(() => {
-          const [barOneIdx, newHeight] = animations[i];
-          const barOneStyle = arrayBars[barOneIdx].style;
-          barOneStyle.height = `${newHeight}px`;
-        }, i * ANIMATION_SPEED_MS);
+          const bar1styles = arraybars[bar1].style;
+          bar1styles.height = `${newheight}px`;
+        }, i * 5);
       }
     }
-  }
-
-  quickSort() {
-    // We leave it as an exercise to the viewer of this code to implement this method.
   }
 
   heapSort() {
-    // We leave it as an exercise to the viewer of this code to implement this method.
-  }
-
-  bubbleSort() {
-    // We leave it as an exercise to the viewer of this code to implement this method.
-  }
-
-  // NOTE: This method will only work if your sorting algorithms actually return
-  // the sorted arrays; if they return the animations (as they currently do), then
-  // this method will be broken.
-  testSortingAlgorithms() {
-    for (let i = 0; i < 100; i++) {
-      const array = [];
-      const length = randomIntFromInterval(1, 1000);
-      for (let i = 0; i < length; i++) {
-        array.push(randomIntFromInterval(-1000, 1000));
+    const animations = heapSort(this.state.array);
+    for (let i = 0; i < animations.length; i++) {
+      const arraybars = document.getElementsByClassName('bars');
+      if (i % 2 == 0) {
+        const [bar1, bar2] = animations[i];
+        const bar1style = arraybars[bar1].style;
+        const bar2style = arraybars[bar2].style;
+        setTimeout(() => {
+          bar1style.backgroundColor = secondary_color;
+          bar2style.backgroundColor = secondary_color;
+          let t = bar1style.height;
+          bar1style.height = bar2style.height;
+          bar2style.height = t;
+        }, i * 5);
+      } else {
+        const [bar1, bar2] = animations[i];
+        const bar1style = arraybars[bar1].style;
+        const bar2style = arraybars[bar2].style;
+        setTimeout(() => {
+          bar1style.backgroundColor = primary_color;
+          bar2style.backgroundColor = primary_color;
+        }, i * 5);
       }
-      const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
-      const mergeSortedArray = getMergeSortAnimations(array.slice());
-      console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
     }
   }
 
+  bubbleSort() {
+    const animations = bubblesort(this.state.array);
+    for (let i = 0; i < animations.length; i++) {
+      const arraybars = document.getElementsByClassName('bars');
+      const changecolor = i % 3 !== 2;
+      if (changecolor) {
+        const [bar1, bar2] = animations[i];
+        const bar1style = arraybars[bar1].style;
+        const bar2style = arraybars[bar2].style;
+        const color = i % 3 === 0 ? secondary_color : primary_color;
+        setTimeout(() => {
+          bar1style.backgroundColor = color;
+          bar2style.backgroundColor = color;
+        }, i * 3);
+      } else {
+        const [bar1, newheight1, bar2, newheight2] = animations[i];
+        setTimeout(() => {
+          const bar1styles = arraybars[bar1].style;
+          const bar2styles = arraybars[bar2].style;
+          bar1styles.height = `${newheight1}px`;
+          bar2styles.height = `${newheight2}px`;
+        }, i * 3);
+      }
+    }
+  }
+  insertionSort() {
+    const animations = insertionSort(this.state.array);
+    for (let i = 0; i < animations.length; i++) {
+      const arraybars = document.getElementsByClassName('bars');
+      if (i % 2 == 0) {
+        const [bar1, bar2] = animations[i];
+        const bar1style = arraybars[bar1].style;
+        const bar2style = arraybars[bar2].style;
+        setTimeout(() => {
+          bar1style.backgroundColor = secondary_color;
+          bar2style.backgroundColor = secondary_color;
+          let t = bar1style.height;
+          bar1style.height = bar2style.height;
+          bar2style.height = t;
+        }, i * 5);
+      } else {
+        const [bar1, bar2] = animations[i];
+        const bar1style = arraybars[bar1].style;
+        const bar2style = arraybars[bar2].style;
+        setTimeout(() => {
+          bar1style.backgroundColor = primary_color;
+          bar2style.backgroundColor = primary_color;
+        }, i * 5);
+      }
+    }
+  }
   render() {
     const {array} = this.state;
-
     return (
-      <div className="array-container">
-        {array.map((value, idx) => (
-          <div
-            className="array-bar"
-            key={idx}
-            style={{
-              backgroundColor: PRIMARY_COLOR,
-              height: `${value}px`,
-            }}></div>
+      <div className="container">
+        {array.map((value, id) => (
+          <div className="bars" key={id} style={{height: `${value}px`}}></div>
         ))}
         <button onClick={() => this.resetArray()}>Generate New Array</button>
         <button onClick={() => this.mergeSort()}>Merge Sort</button>
-        <button onClick={() => this.quickSort()}>Quick Sort</button>
         <button onClick={() => this.heapSort()}>Heap Sort</button>
         <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-        <button onClick={() => this.testSortingAlgorithms()}>
-          Test Sorting Algorithms (BROKEN)
-        </button>
+        <button onClick={() => this.insertionSort()}>Insertion Sort</button>
       </div>
     );
   }
 }
-
-// From https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
-function randomIntFromInterval(min, max) {
-  // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function arraysAreEqual(arrayOne, arrayTwo) {
-  if (arrayOne.length !== arrayTwo.length) return false;
-  for (let i = 0; i < arrayOne.length; i++) {
-    if (arrayOne[i] !== arrayTwo[i]) {
-      return false;
-    }
-  }
-  return true;
+function getRandomArbitrary(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
 }
