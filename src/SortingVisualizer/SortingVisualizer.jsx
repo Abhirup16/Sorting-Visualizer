@@ -6,7 +6,7 @@ import {
   bubblesort,
   insertionSort,
   heapSort,
-} from '../SortingAlgorithms/SortingAlgorithms.js';
+} from '../sortingAlgorithms/sortingAlgorithms.js';
 const primary_color = 'turquoise';
 const secondary_color = 'tomato';
 export default class SortingVisualizer extends React.Component {
@@ -56,7 +56,7 @@ export default class SortingVisualizer extends React.Component {
     const animations = heapSort(this.state.array);
     for (let i = 0; i < animations.length; i++) {
       const arraybars = document.getElementsByClassName('bars');
-      if (i % 2 == 0) {
+      if (i % 2 === 0) {
         const [bar1, bar2] = animations[i];
         const bar1style = arraybars[bar1].style;
         const bar2style = arraybars[bar2].style;
@@ -108,7 +108,7 @@ export default class SortingVisualizer extends React.Component {
     const animations = insertionSort(this.state.array);
     for (let i = 0; i < animations.length; i++) {
       const arraybars = document.getElementsByClassName('bars');
-      if (i % 2 == 0) {
+      if (i % 2 === 0) {
         const [bar1, bar2] = animations[i];
         const bar1style = arraybars[bar1].style;
         const bar2style = arraybars[bar2].style;
